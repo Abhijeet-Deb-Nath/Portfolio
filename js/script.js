@@ -120,9 +120,9 @@ projectCards.forEach(card => {
     });
 });
 
-// Certificate card hover effect enhancement
-const certificateCards = document.querySelectorAll('.certificate-card');
-certificateCards.forEach(card => {
+// achievements card hover effect enhancement
+const achievementsCards = document.querySelectorAll('.achievements-card');
+achievementsCards.forEach(card => {
     card.addEventListener('mouseenter', () => {
         card.style.transform = 'translateY(-5px)';
     });
@@ -131,3 +131,19 @@ certificateCards.forEach(card => {
         card.style.transform = 'translateY(0)';
     });
 });
+
+// Smooth scrolling for blog section links
+document.querySelectorAll('.blog-sidebar a').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    });
+});
+
+

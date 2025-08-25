@@ -65,11 +65,11 @@ body {
 }
 
 .nav-menu a {
-    text-decoration: none;
     color: var(--dark-color);
     font-weight: 500;
     transition: var(--transition);
     position: relative;
+    text-decoration: none;
 }
 
 .nav-menu a:hover {
@@ -148,10 +148,10 @@ body {
     display: inline-block;
     padding: 12px 30px;
     border-radius: 30px;
-    text-decoration: none;
     font-weight: 600;
     transition: var(--transition);
     border: 2px solid transparent;
+    text-decoration: none;
 }
 
 .primary-btn {
@@ -484,24 +484,24 @@ section {
 
 .project-link {
     color: var(--primary-color);
-    text-decoration: none;
     font-size: 0.9rem;
     font-weight: 500;
     transition: var(--transition);
+    text-decoration: none;
 }
 
 .project-link:hover {
     color: var(--secondary-color);
 }
 
-/* Certificates Section */
-.certificates-grid {
+/* achievements Section */
+.achievements-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 2rem;
 }
 
-.certificate-card {
+.achievements-card {
     background: var(--white);
     border-radius: 10px;
     overflow: hidden;
@@ -509,12 +509,12 @@ section {
     transition: var(--transition);
 }
 
-.certificate-card:hover {
+.achievements-card:hover {
     transform: translateY(-5px);
     box-shadow: var(--shadow-hover);
 }
 
-.certificate-image {
+.achievements-image {
     height: 200px;
     background: linear-gradient(135deg, var(--accent-color), #FF8E53);
     display: flex;
@@ -522,27 +522,27 @@ section {
     justify-content: center;
 }
 
-.certificate-placeholder {
+.achievements-placeholder {
     color: var(--white);
     text-align: center;
 }
 
-.certificate-placeholder i {
+.achievements-placeholder i {
     font-size: 3rem;
     margin-bottom: 1rem;
 }
 
-.certificate-content {
+.achievements-content {
     padding: 1.5rem;
 }
 
-.certificate-content h3 {
+.achievements-content h3 {
     color: var(--dark-color);
     margin-bottom: 0.5rem;
     font-size: 1.2rem;
 }
 
-.certificate-content p {
+.achievements-content p {
     color: var(--gray-color);
     margin-bottom: 0.3rem;
 }
@@ -552,6 +552,128 @@ section {
     font-weight: 500;
     font-size: 0.9rem;
 }
+/* Blog Section */
+.blog {
+    padding: 80px 0;
+    background-color: var(--light-color); /* Lighter background to make the cards pop */
+}
+
+.blog .section-title {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.blog .section-title h2 {
+    font-size: 2.5rem;
+    font-family: 'Montserrat', sans-serif;
+    color: var(--dark-color);
+    margin-bottom: 1rem;
+}
+
+/* Blog Cards Layout */
+.blog-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);  /* 3 columns for large screens */
+    gap: 2rem;
+    margin-bottom: 2rem;
+    
+}
+
+
+.card {
+    background: var(--white);
+    border-radius: 15px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-hover);
+}
+
+/* Header Styling */
+.card-header {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); /* Gradient background */
+    color: var(--white);
+    padding: 25px;
+    text-align: center;
+    font-size: 1.6rem;
+    font-weight: 600;
+    position: relative;
+    border-radius: 15px 15px 0 0;  /* Rounded top corners */
+    overflow: hidden;
+}
+
+.card-header::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: var(--accent-color);
+}
+
+
+/* Card Content */
+.card-content {
+    padding: 1.5rem;
+    flex-grow: 1;
+    background-color: var(--white);
+}
+
+
+.card-content h3 {
+    font-size: 1.8rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+.card-content p {
+    font-size: 1rem;
+    color: var(--gray-color);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+/* Blog Category (Post) Layout */
+.blog-category {
+    margin-bottom: 2rem;
+}
+
+.blog-category h3 {
+    font-size: 2rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.blog-category .post {
+    background-color: var(--white);
+    padding: 1rem;
+    border-radius: 15px;
+    box-shadow: var(--shadow);
+    margin-bottom: 1rem;
+}
+
+.blog-category .post h4 {
+    font-size: 1.5rem;
+    color: var(--dark-color);
+    margin-bottom: 0.5rem;
+}
+
+.blog-category .post p {
+     font-size: 1rem;
+    color: var(--gray-color);
+}
+
 
 /* Contact Section */
 .contact {
@@ -618,8 +740,8 @@ section {
     border-radius: 50%;
     background: var(--primary-color);
     color: var(--white);
-    text-decoration: none;
     transition: var(--transition);
+    text-decoration: none;
 }
 
 .social-links a:hover {
@@ -676,8 +798,8 @@ section {
 
 .footer-links a {
     color: #B0B0B0;
-    text-decoration: none;
     transition: var(--transition);
+    text-decoration: none;
 }
 
 .footer-links a:hover {
@@ -698,8 +820,8 @@ section {
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.1);
     color: var(--white);
-    text-decoration: none;
     transition: var(--transition);
+    text-decoration: none;
 }
 
 .footer-social a:hover {
@@ -749,6 +871,46 @@ section {
     .timeline-item:nth-child(even) .timeline-content {
         margin-right: 0 !important;
     }
+
+    /* Blog Section for Large Screens (992px) */
+    .blog .blog-content {
+        display: flex;
+        gap: 3rem;
+        justify-content: space-between;
+    }
+
+    .blog-sidebar {
+        width: 25%; 
+    }
+
+    .blog-main {
+        width: 70%;
+    }
+    .blog-cards {
+        grid-template-columns: 1fr 1fr;  /* 2 columns for medium screens */
+    }
+
+    .card-content h3 {
+        font-size: 1.5rem; /* Smaller title */
+    }
+
+    .card-content p {
+        font-size: 0.9rem; /* Smaller description */
+    }
+
+    .blog-category h3 {
+        font-size: 1.8rem; /* Smaller heading */
+    }
+
+    .blog-category .post h4 {
+        font-size: 1.2rem; /* Smaller post title */
+    }
+
+    .blog-category .post p {
+        font-size: 0.9rem; /* Smaller post description */
+    }
+
+
 }
 
 @media (max-width: 768px) {
@@ -787,9 +949,46 @@ section {
     }
     
     .projects-grid,
-    .certificates-grid {
+    .achievements-grid {
         grid-template-columns: 1fr;
     }
+
+    /* Blog Section for Tablets (768px) */
+    .blog .blog-content {
+        flex-direction: column; 
+    }
+
+    .blog-sidebar {
+        width: 100%;
+        margin-bottom: 2rem;
+    }
+
+    .blog-main {
+        width: 100%;
+    }
+
+    .blog-category h3 {
+        font-size: 1.8rem;
+    }
+
+    .blog-category .post h4 {
+        font-size: 1.2rem;
+    }
+    .blog-cards {
+        grid-template-columns: 1fr;
+    }
+
+
+
+    .card-content p {
+        font-size: 0.9rem; /* Smaller description */
+    }
+
+    .blog-category .post p {
+        font-size: 0.9rem; /* Smaller post description */
+    }
+    
+
 }
 
 @media (max-width: 576px) {
@@ -812,6 +1011,40 @@ section {
     section {
         padding: 60px 0;
     }
+       
+    /* Blog Section for Mobile Devices (576px) */
+    .blog .blog-content {
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    .blog-sidebar {
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+
+    .blog-main {
+        width: 100%;
+    }
+
+    .blog-category h3 {
+        font-size: 1.6rem;
+    }
+
+    .blog-category .post h4 {
+        font-size: 1rem;
+    }
+
+    .blog-category .post p {
+        font-size: 0.9rem;
+    }
+
+    .blog-sidebar ul li {
+        font-size: 1rem;
+    }
+    
+    
+
 }
 
 /* Animation Classes */
