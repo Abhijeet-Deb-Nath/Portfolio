@@ -590,6 +590,8 @@ section {
     display: flex;
     flex-direction: column;
     position: relative;
+    text-align: none;
+    text-decoration: none !important;
 }
 
 

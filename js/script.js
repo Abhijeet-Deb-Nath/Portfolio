@@ -147,3 +147,7 @@ document.querySelectorAll('.blog-sidebar a').forEach(anchor => {
 });
 
 
+// JavaScript to remove underline from blog links
+document.querySelectorAll('.blog a').forEach(anchor => {
+    anchor.style.textDecoration = 'none';  // Remove underline
+});
