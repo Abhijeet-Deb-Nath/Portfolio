@@ -1,0 +1,276 @@
+/* Admin Dashboard Styles */
+
+/* General Admin Layout */
+
+/* General Styles */
+
+
+
+
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f4f7fc;  /* Light background for a premium look */
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+.admin-header {
+    background-color: #6C63FF; /* Soft purple color for header */
+    color: #fff;
+    padding: 2rem 1rem;
+    text-align: center;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.admin-header h2 {
+    font-size: 2.5rem;
+    margin: 0;
+    font-weight: 600;
+}
+
+.admin-content {
+    padding: 2rem 1rem;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.1);
+    margin-top: 2rem;
+}
+
+/* Admin Section Titles */
+.admin-section h3 {
+    font-size: 2rem;
+    color: #333;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    text-align: center;
+    border-bottom: 2px solid #6C63FF;
+    padding-bottom: 0.5rem;
+    margin-bottom: 2rem;
+}
+
+/* Admin Buttons */
+.admin-section .btn {
+    padding: 12px 25px;
+    background-color: #6C63FF;
+    color: white;
+    border-radius: 6px;
+    font-weight: 600;
+    text-decoration: none;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    margin-top: 1rem;
+    display: inline-block;
+}
+
+.admin-section .btn:hover {
+    background-color: #4a44b5;  /* Darker shade for hover effect */
+    transform: translateY(-5px);
+}
+
+/* Admin Cards Layout */
+.admin-section .card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    margin-bottom: 2rem;
+    transition: transform 0.3s ease;
+}
+
+.admin-section .card:hover {
+    transform: translateY(-10px);
+}
+
+/* Form Styles */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    color: #333;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #6C63FF;
+}
+
+/* Admin Table (for CRUD listings) */
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+.admin-table th,
+.admin-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.admin-table th {
+    background-color: #6C63FF;
+    color: white;
+    font-weight: 600;
+}
+
+.admin-table td {
+    color: #333;
+}
+
+/* Pagination */
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.pagination a {
+    padding: 10px 20px;
+    margin: 0 5px;
+    background-color: #6C63FF;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+}
+
+.pagination a:hover {
+    background-color: #4a44b5;
+}
+
+/* Sidebar for Admin Navigation */
+.admin-sidebar {
+    background-color: #2a2a3c;
+    color: white;
+    padding: 2rem 1rem;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 250px;
+    height: 100%;
+    box-shadow: 4px 0px 12px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-sidebar a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    transition: background-color 0.3s ease;
+    padding: 10px 0;
+    text-align: center;
+}
+
+.admin-sidebar a:hover {
+    background-color: #4a44b5;
+    border-radius: 5px;
+}
+
+.admin-sidebar a.active {
+    background-color: #6C63FF;
+}
+
+/* Responsive Styles */
+@media (max-width: 992px) {
+    .admin-header h2 {
+        font-size: 2rem;
+    }
+
+    .admin-content {
+        padding: 1.5rem;
+    }
+
+    .admin-section h3 {
+        font-size: 1.6rem;
+    }
+
+    .admin-sidebar {
+        width: 200px;
+        padding: 1rem;
+    }
+
+    .admin-sidebar a {
+        font-size: 1.1rem;
+    }
+
+    .pagination a {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .admin-header h2 {
+        font-size: 1.6rem;
+    }
+
+    .admin-sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        padding: 1rem;
+    }
+
+    .admin-sidebar a {
+        font-size: 1rem;
+    }
+
+    .admin-content {
+        padding: 1.5rem;
+    }
+
+    .admin-section h3 {
+        font-size: 1.4rem;
+    }
+
+    .pagination a {
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .admin-header h2 {
+        font-size: 1.4rem;
+    }
+
+    .admin-sidebar a {
+        font-size: 1rem;
+    }
+
+    .admin-content {
+        padding: 1rem;
+    }
+
+    .admin-section h3 {
+        font-size: 1.3rem;
+    }
+
+    .admin-section .btn {
+        padding: 8px 16px;
+    }
+
+    .pagination a {
+        font-size: 0.7rem;
+    }
+
+    
+}
+
+
+

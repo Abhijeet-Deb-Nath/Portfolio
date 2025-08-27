@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/admin_login-style.css">
+</head>
+<body>
+    <div class="login-container">
+        <h2>Admin Login</h2>
+        <form id="adminLoginForm">
+            <label for="adminKey">Enter Admin Key:</label>
+            <input type="password" id="adminKey" name="adminKey" placeholder="Enter Admin Key" required>
+            <button type="submit" class="btn primary-btn">Login</button>
+        </form>
+        <div id="errorMessage" class="error-message">Invalid admin key. Please try again.</div>
+    </div>
+</body>
+
+<script src="admin_login_script.js"></script>
+</html>
