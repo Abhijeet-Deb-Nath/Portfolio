@@ -145,9 +145,21 @@ document.querySelectorAll('.blog-sidebar a').forEach(anchor => {
         }
     });
 });
-
-
 // JavaScript to remove underline from blog links
 document.querySelectorAll('.blog a').forEach(anchor => {
     anchor.style.textDecoration = 'none';  // Remove underline
 });
+
+
+
+// Get the button element
+const backToTopButton = document.getElementById('backToTop');
+
+// Scroll to the top when the Back to Top button is clicked
+backToTopButton.addEventListener('click', function () {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth' // Smooth scrolling effect
+    });
+});
+

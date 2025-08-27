@@ -773,63 +773,52 @@ section {
     box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.1);
 }
 
-/* Footer */
+
+
+
+
+
+/* Base layout for desktop (large screens) */
 .footer {
-    background: var(--dark-color);
-    color: var(--white);
-    padding: 3rem 0 1rem;
-}
-
-.footer-content {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 2rem;
-    margin-bottom: 2rem;
-}
-
-.footer-logo h3 {
-    color: var(--white);
-    margin-bottom: 1rem;
-}
-
-.footer-links {
     display: flex;
-    flex-direction: column;
-    gap: 0.8rem;
+    justify-content: space-between;  /* Distribute items evenly */
+    align-items: center;  /* Vertically align items */
+    padding: 40px 20px;
+    background-color: var(--dark-color);
+    color: var(--white);
+    position: relative;  
 }
 
-.footer-links a {
-    color: #B0B0B0;
-    transition: var(--transition);
+.footer-bottom {
+    text-align: right;  /* Align the "All Rights Reserved" text to the right */
+    font-size: 0.9rem;
+}
+
+.admin-login {
+    text-align: left;  /* Align the button to the left */
+    position: absolute;
+    left: 20px;  /* Position the button at the left side */
+    top: 50%;  /* Center the button vertically in the footer */
+    transform: translateY(-50%);  /* Adjust to truly center vertically */
+}
+.admin-btn {
+    display: inline-block;
+    padding: 6px 12px;  /* Smaller padding */
+    background-color: var(--primary-color);
+    color: var(--white);
+    font-weight: 500;  /* Lighter font weight */
+    border-radius: 5px;
     text-decoration: none;
+    font-size: 0.85rem;  /* Smaller font size */
+    transition: background-color 0.3s;
 }
 
-.footer-links a:hover {
-    color: var(--white);
+.admin-btn:hover {
+    background-color: var(--secondary-color);
+    box-shadow: var(--shadow-hover);
 }
 
-.footer-social {
-    display: flex;
-    gap: 1rem;
-}
 
-.footer-social a {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.1);
-    color: var(--white);
-    transition: var(--transition);
-    text-decoration: none;
-}
-
-.footer-social a:hover {
-    background: var(--primary-color);
-    transform: translateY(-3px);
-}
 
 .footer-bottom {
     text-align: center;
@@ -838,6 +827,61 @@ section {
     color: #B0B0B0;
     font-size: 0.9rem;
 }
+
+/* Back to Top Link Styles */
+.back-to-top-container {
+    text-align: center; /* Center-align the link */
+    margin-top: 20px; /* Some space between the footer and the link */
+}
+
+
+/* Back to Top Button Styles */
+.back-to-top {
+    position: absolute;  /* Position the button relative to the footer */
+    bottom: 20px;  /* 20px from the bottom of the footer */
+    right: 20px;   /* 20px from the right of the footer */
+    background-color: #007bff; /* Blue background color */
+    color: white;
+    border: none;
+    border-radius: 20%;  /* Circular button */
+    padding: 12px;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    transition: 0.3s ease-in-out;
+}
+
+
+
+.back-to-top:hover {
+    background-color: #0056b3; /* Darker blue when hovered */
+    transform: scale(1.1);  /* Slight zoom effect */
+}
+
+
+.admin-login {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.admin-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: var(--primary-color);
+    color: var(--white);
+    font-weight: 600;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.admin-btn:hover {
+    background-color: var(--secondary-color);
+    box-shadow: var(--shadow-hover);
+}
+
+
+
 
 /* Responsive Design */
 @media (max-width: 992px) {
@@ -912,8 +956,28 @@ section {
         font-size: 0.9rem; /* Smaller post description */
     }
 
+    .back-to-top {
+        font-size: 1rem; /* Adjust font size for smaller screens */
+    }
+    .footer {
+        flex-direction: column;  /* Stack the elements vertically */
+        text-align: center;  /* Center-align all items */
+    }
 
+    .footer-bottom {
+        text-align: center;  /* Center the footer text on tablets */
+        margin-top: 10px;  /* Add some space between the elements */
+    }
+
+    .admin-login {
+        margin-bottom: 10px;  /* Add some space between the button and the footer text */
+        position: relative;  /* Remove absolute positioning for better stacking */
+        top: auto;  /* Reset top positioning */
+        transform: none;  /* Reset vertical centering */
+    }
 }
+
+
 
 @media (max-width: 768px) {
     .menu-toggle {
@@ -990,6 +1054,29 @@ section {
         font-size: 0.9rem; /* Smaller post description */
     }
     
+    .back-to-top {
+        font-size: 0.9rem; /* Adjust font size for smaller screens */
+    }
+
+
+    @media (max-width: 768px) {
+    .footer {
+        flex-direction: column;  /* Stack the elements vertically */
+        text-align: center;  /* Center-align all items */
+        padding: 30px 10px;  /* Reduce padding */
+    }
+
+    .footer-bottom {
+        font-size: 0.85rem;  /* Slightly smaller font size for better spacing */
+        margin-top: 15px;  /* Add space between button and footer text */
+    }
+
+    .admin-btn {
+        padding: 5px 10px;  /* Smaller padding for mobile */
+        font-size: 0.75rem;  /* Even smaller font size on smaller screens */
+    }
+}
+
 
 }
 
@@ -1045,7 +1132,31 @@ section {
         font-size: 1rem;
     }
     
-    
+    .back-to-top {
+        bottom: 15px; /* More space from bottom */
+        right: 15px;  /* Align button closer to the edge */
+        padding: 8px 12px; /* Smallest padding */
+        font-size: 1rem;  /* Smaller font size for mobile */
+    }
+
+    .back-to-top {
+        font-size: 0.8rem; /* Adjust font size for smaller screens */
+    }
+
+    .footer {
+        padding: 20px 10px;  /* Reduce padding on mobile devices */
+    }
+
+    .footer-bottom {
+        font-size: 0.8rem;  /* Reduce font size for small screens */
+        margin-top: 10px;  /* Adjust spacing for mobile */
+    }
+
+    .admin-btn {
+        font-size: 0.7rem;  /* Make the button text smaller on mobile */
+        padding: 4px 8px;  /* Reduce padding for mobile */
+    }
+
 
 }
 
