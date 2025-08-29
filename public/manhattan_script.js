@@ -61,11 +61,14 @@
       description: r.description || "",
     }),
     blogs: (r) => ({
-      id: String(r.id),
-      title: r.title || "",
-      status: r.is_published ? "published" : "draft",
-      body: r.body || "",
-    }),
+  id: String(r.id),
+  title: r.title || "",
+  status: r.is_published ? "published" : "draft",
+  body: r.body || "",
+  // computed preview for the table’s “Excerpt” column:
+  excerpt: (r.body || "").replace(/\s+/g, " ").trim().slice(0, 140) + ((r.body || "").length > 140 ? "…" : ""),
+}),
+
   };
 
   // Small helpers

@@ -5,9 +5,14 @@
 (function () {
   const $ = (s, c = document) => c.querySelector(s);
 
+  // NEW: dynamic root based on current URL
+  const ROOT = location.pathname.includes('/public/')
+    ? location.pathname.split('/public/')[0]
+    : '';
+
   const CFG = {
-    VERIFY_ENDPOINT: "/portfolio/app/auth/verify_key.php",
-    REDIRECT_FALLBACK: "/portfolio/public/manhattan.html",
+    VERIFY_ENDPOINT: `${ROOT}/app/auth/verify_key.php`,
+    REDIRECT_FALLBACK: `${ROOT}/public/manhattan.html`,
   };
 
   const form = $("#keyForm");
