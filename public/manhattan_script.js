@@ -23,15 +23,19 @@
       tags: o.tech || o.tags || "",
       github_url: o.github || "",
       image_path: o.image_path || "",
+      is_published: (o.status || "published").toLowerCase() === "published" ? 1 : 0,
       // live_url omitted (you deliberately skipped it in DB)
     }),
+
     achievements: (o) => ({
       title: o.title || "",
-      issuer: o.organization || "",
       issued_at: o.issued || null,
       image_path: o.link || "",       // using image_path column to store link (simple)
       description: o.description || "",
+      is_published: (o.status || "published").toLowerCase() === "published" ? 1 : 0,
     }),
+
+    
     blogs: (o) => ({
       // posts table: create a slug from title, store excerpt as body
       title: o.title || "",
@@ -44,22 +48,25 @@
 
   const fromApi = {
     projects: (r) => ({
-      id: String(r.id),
-      title: r.title || "",
-      tech: r.tags || "",                 // UI shows "tech", DB stores "tags"
-      github: r.github_url || "",
-      live: "",                           // not used in DB
-      description: r.description || "",
-      image_path: r.image_path || "",
-    }),
-    achievements: (r) => ({
-      id: String(r.id),
-      title: r.title || "",
-      organization: r.issuer || "",
-      issued: r.issued_at || "",
-      link: r.image_path || "",
-      description: r.description || "",
-    }),
+  id: String(r.id),
+  title: r.title || "",
+  tech: r.tags || "",
+  github: r.github_url || "",
+  live: "",
+  description: r.description || "",
+  image_path: r.image_path || "",
+  status: r.is_published ? "published" : "draft",
+}),
+
+achievements: (r) => ({
+  id: String(r.id),
+  title: r.title || "",
+  issued: r.issued_at || "",
+  link: r.image_path || "",
+  description: r.description || "",
+  status: r.is_published ? "published" : "draft",
+}),
+
     blogs: (r) => ({
   id: String(r.id),
   title: r.title || "",

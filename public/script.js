@@ -234,7 +234,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   async function loadProjects() {
     const wrap = $(".projects-grid");
     if (!wrap) return;
-    try {
+    /*try {
       const { data } = await fetchJSON(`${API_BASE}/projects.php`);
       wrap.innerHTML = "";
       (data || []).forEach(p => {
@@ -256,11 +256,37 @@ document.addEventListener('DOMContentLoaded', async () => {
         wrap.appendChild(el);
       });
     } catch (e) { console.warn("Projects load failed:", e); }
-  }
+    */
+    try {
+  const { data } = await fetchJSON(`${API_BASE}/projects.php`);
+  const rows = (Array.isArray(data) ? data : []).filter(r => (r.is_published ?? 1) == 1);
+  wrap.innerHTML = "";
+  rows.forEach(p => {
+    const tags = (p.tags || "").split(",").map(s => s.trim()).filter(Boolean);
+    const el = document.createElement("article");
+    el.className = "project-card fade-in appear";
+    el.innerHTML = `
+      <div class="project-image">
+        <div class="project-placeholder"><i class="fas fa-code"></i></div>
+      </div>
+      <div class="project-content">
+        <h3>${esc(p.title)}</h3>
+        <p>${esc((p.description || "").slice(0, 160))}${(p.description || "").length > 160 ? "…" : ""}</p>
+        <div class="project-tags">${tags.map(t => `<span class="tag">${esc(t)}</span>`).join("")}</div>
+        <div class="project-links">
+          ${p.github_url ? `<a class="project-link" href="${esc(p.github_url)}" target="_blank" rel="noopener"><i class="fab fa-github"></i> GitHub</a>` : ""}
+        </div>
+      </div>`;
+    wrap.appendChild(el);
+  });
+} catch (e) { console.warn("Projects load failed:", e); }
+
+    }
 
   async function loadAchievements() {
     const wrap = $(".achievements-grid");
     if (!wrap) return;
+    /*
     try {
       const { data } = await fetchJSON(`${API_BASE}/achievements.php`);
       wrap.innerHTML = "";
@@ -281,11 +307,35 @@ document.addEventListener('DOMContentLoaded', async () => {
         wrap.appendChild(el);
       });
     } catch (e) { console.warn("Achievements load failed:", e); }
+     */
+    try {
+  const { data } = await fetchJSON(`${API_BASE}/achievements.php`);
+  const rows = (Array.isArray(data) ? data : []).filter(r => (r.is_published ?? 1) == 1);
+  wrap.innerHTML = "";
+  rows.forEach(a => {
+    const el = document.createElement("div");
+    el.className = "achievements-card fade-in appear";
+    el.innerHTML = `
+      <div class="achievements-image">
+        <div class="achievements-placeholder">
+          <i class="fas fa-trophy"></i>
+          <p>Achievement</p>
+        </div>
+      </div>
+      <div class="achievements-content">
+        <h3>${esc(a.title)}</h3>
+        <p class="issue-date">Issued: ${esc(a.issued_at || "")}</p>
+      </div>`;
+    wrap.appendChild(el);
+  });
+} catch (e) { console.warn("Achievements load failed:", e); }
+
   }
 
   async function loadBlogs() {
     const wrap = $(".blog-cards");
     if (!wrap) return;
+    /*
     try {
       const { data } = await fetchJSON(`${API_BASE}/posts.php`);
       wrap.innerHTML = "";
@@ -303,6 +353,26 @@ document.addEventListener('DOMContentLoaded', async () => {
         wrap.appendChild(el);
       });
     } catch (e) { console.warn("Blogs load failed:", e); }
+     */
+    try {
+  const { data } = await fetchJSON(`${API_BASE}/posts.php`);
+  const rows = (Array.isArray(data) ? data : []).filter(r => (r.is_published ?? 1) == 1);
+  wrap.innerHTML = "";
+  rows.forEach(b => {
+    const excerpt = (b.body || "").replace(/\s+/g, " ").trim().slice(0, 160) + ((b.body || "").length > 160 ? "…" : "");
+    const el = document.createElement("article");
+    el.className = "card fade-in appear";
+    el.innerHTML = `
+      <a href="#" class="card-link" aria-label="Read blog post: ${esc(b.title || "")}">
+        <div class="card-content">
+          <h3>${esc(b.title || "")}</h3>
+          <p>${esc(excerpt)}</p>
+        </div>
+      </a>`;
+    wrap.appendChild(el);
+  });
+} catch (e) { console.warn("Blogs load failed:", e); }
+
   }
 
   document.addEventListener("DOMContentLoaded", () => {

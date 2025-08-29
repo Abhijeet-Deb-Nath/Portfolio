@@ -1,20 +1,16 @@
 <?php
 // app/api/projects.php
-require_once __DIR__ . '/../middleware/require_admin.php';
+declare(strict_types=1);
 require_once __DIR__ . '/../lib/db.php';
 require_once __DIR__ . '/../lib/http.php';
-
-// Routes:
-// GET    /app/api/projects.php            -> list
-// GET    /app/api/projects.php?id=123     -> get one
-// POST   /app/api/projects.php            -> create (JSON or form)
-// PUT    /app/api/projects.php            -> update (JSON with id)
-// DELETE /app/api/projects.php?id=123     -> delete
+require_once __DIR__ . '/../lib/session.php';
 
 $pdo = db();
 $m = method();
+$isAdmin = !empty($_SESSION['is_admin']);
 
 try {
+  // ---------- PUBLIC/ADMIN: GET ----------
   if ($m === 'GET') {
     if (!empty($_GET['id'])) {
       $id = (int)$_GET['id'];
@@ -23,27 +19,39 @@ try {
       $row = $st->fetch();
       json_out(['ok' => (bool)$row, 'data' => $row]);
     } else {
-      $st = $pdo->query("SELECT * FROM projects ORDER BY created_at DESC");
-      $rows = $st->fetchAll();
-      json_out(['ok' => true, 'data' => $rows]);
+      $sql = "
+        SELECT id, title, description, tags, github_url, image_path, is_published, created_at, updated_at
+        FROM projects
+        " . ($isAdmin ? "" : "WHERE is_published = 1") . "
+        ORDER BY created_at DESC
+      ";
+      $st = $pdo->query($sql);
+      json_out(['ok' => true, 'data' => $st->fetchAll()]);
     }
+    exit;
   }
+
+  // ---------- ADMIN: POST/PUT/DELETE ----------
+  require_once __DIR__ . '/../middleware/require_admin.php';
 
   if ($m === 'POST') {
     $d = body();
-    $title = trim($d['title'] ?? '');
-    $description = trim($d['description'] ?? '');
-    $tags = trim($d['tags'] ?? '');
-    $github_url = trim($d['github_url'] ?? '');
-    $image_path = trim($d['image_path'] ?? '');
+    $title        = trim($d['title'] ?? '');
+    $description  = trim($d['description'] ?? '');
+    $tags         = trim($d['tags'] ?? '');
+    $github_url   = trim($d['github_url'] ?? '');
+    $image_path   = trim($d['image_path'] ?? '');
+    $is_published = isset($d['is_published']) ? (int)!!$d['is_published'] : 1;
 
     if ($title === '' || $description === '') {
       json_out(['ok' => false, 'error' => 'Title and description are required'], 422);
     }
 
-    $st = $pdo->prepare("INSERT INTO projects (title, description, tags, github_url, image_path, created_at, updated_at)
-                         VALUES (?, ?, ?, ?, ?, NOW(), NOW())");
-    $st->execute([$title, $description, $tags, $github_url, $image_path]);
+    $st = $pdo->prepare(
+      "INSERT INTO projects (title, description, tags, github_url, image_path, is_published, created_at, updated_at)
+       VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW())"
+    );
+    $st->execute([$title, $description, $tags, $github_url, $image_path, $is_published]);
     json_out(['ok' => true, 'id' => (int)$pdo->lastInsertId()]);
   }
 
@@ -52,21 +60,25 @@ try {
     $id = (int)($d['id'] ?? 0);
     if ($id <= 0) json_out(['ok' => false, 'error' => 'Missing id'], 422);
 
-    $title = trim($d['title'] ?? '');
-    $description = trim($d['description'] ?? '');
-    $tags = trim($d['tags'] ?? '');
-    $github_url = trim($d['github_url'] ?? '');
-    $image_path = trim($d['image_path'] ?? '');
+    $title        = trim($d['title'] ?? '');
+    $description  = trim($d['description'] ?? '');
+    $tags         = trim($d['tags'] ?? '');
+    $github_url   = trim($d['github_url'] ?? '');
+    $image_path   = trim($d['image_path'] ?? '');
+    $is_published = isset($d['is_published']) ? (int)!!$d['is_published'] : 1;
 
-    $st = $pdo->prepare("UPDATE projects SET title=?, description=?, tags=?, github_url=?, image_path=?, updated_at=NOW() WHERE id=?");
-    $st->execute([$title, $description, $tags, $github_url, $image_path, $id]);
+    $st = $pdo->prepare(
+      "UPDATE projects
+       SET title=?, description=?, tags=?, github_url=?, image_path=?, is_published=?, updated_at=NOW()
+       WHERE id=?"
+    );
+    $st->execute([$title, $description, $tags, $github_url, $image_path, $is_published, $id]);
     json_out(['ok' => true]);
   }
 
   if ($m === 'DELETE') {
     $id = (int)($_GET['id'] ?? 0);
     if ($id <= 0) json_out(['ok' => false, 'error' => 'Missing id'], 422);
-
     $st = $pdo->prepare("DELETE FROM projects WHERE id=?");
     $st->execute([$id]);
     json_out(['ok' => true]);

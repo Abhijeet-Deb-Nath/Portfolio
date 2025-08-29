@@ -1,13 +1,15 @@
 <?php
 // app/api/posts.php
-require_once __DIR__ . '/../middleware/require_admin.php';
 require_once __DIR__ . '/../lib/db.php';
 require_once __DIR__ . '/../lib/http.php';
+require_once __DIR__ . '/../lib/session.php';
+
 
 $pdo = db();
 $m = method();
 
 try {
+  // --- PUBLIC: only published in list; detail by id allowed (editor needs it) ---
   if ($m === 'GET') {
     if (!empty($_GET['id'])) {
       $id = (int)$_GET['id'];
@@ -16,10 +18,19 @@ try {
       $row = $st->fetch();
       json_out(['ok' => (bool)$row, 'data' => $row]);
     } else {
-      $st = $pdo->query("SELECT id, title, slug, body, cover_image, is_published, created_at, updated_at FROM posts ORDER BY created_at DESC");
+      $st = $pdo->query(
+        "SELECT id, title, slug, body, cover_image, is_published, created_at, updated_at
+         FROM posts
+         WHERE is_published = 1
+         ORDER BY created_at DESC"
+      );
       json_out(['ok' => true, 'data' => $st->fetchAll()]);
     }
+    exit;
   }
+
+  // --- ADMIN: mutations ---
+  require_once __DIR__ . '/../middleware/require_admin.php';
 
   if ($m === 'POST') {
     $d = body();
@@ -33,8 +44,10 @@ try {
       json_out(['ok' => false, 'error' => 'Title, slug and body are required'], 422);
     }
 
-    $st = $pdo->prepare("INSERT INTO posts (title, slug, body, cover_image, is_published, created_at, updated_at)
-                         VALUES (?, ?, ?, ?, ?, NOW(), NOW())");
+    $st = $pdo->prepare(
+      "INSERT INTO posts (title, slug, body, cover_image, is_published, created_at, updated_at)
+       VALUES (?, ?, ?, ?, ?, NOW(), NOW())"
+    );
     $st->execute([$title, $slug, $body, $cover, $is_published]);
     json_out(['ok' => true, 'id' => (int)$pdo->lastInsertId()]);
   }
@@ -50,7 +63,11 @@ try {
     $cover = trim($d['cover_image'] ?? '');
     $is_published = isset($d['is_published']) ? (int)!!$d['is_published'] : 1;
 
-    $st = $pdo->prepare("UPDATE posts SET title=?, slug=?, body=?, cover_image=?, is_published=?, updated_at=NOW() WHERE id=?");
+    $st = $pdo->prepare(
+      "UPDATE posts
+       SET title=?, slug=?, body=?, cover_image=?, is_published=?, updated_at=NOW()
+       WHERE id=?"
+    );
     $st->execute([$title, $slug, $body, $cover, $is_published, $id]);
     json_out(['ok' => true]);
   }
@@ -58,7 +75,6 @@ try {
   if ($m === 'DELETE') {
     $id = (int)($_GET['id'] ?? 0);
     if ($id <= 0) json_out(['ok' => false, 'error' => 'Missing id'], 422);
-
     $st = $pdo->prepare("DELETE FROM posts WHERE id=?");
     $st->execute([$id]);
     json_out(['ok' => true]);
