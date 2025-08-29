@@ -36,7 +36,7 @@
       // posts table: create a slug from title, store excerpt as body
       title: o.title || "",
       slug: slugify(o.title || ""),
-      body: o.excerpt || "",
+      body: o.body || "",
       cover_image: "",
       is_published: (o.status || "draft").toLowerCase() === "published" ? 1 : 0,
     }),
@@ -64,7 +64,7 @@
       id: String(r.id),
       title: r.title || "",
       status: r.is_published ? "published" : "draft",
-      excerpt: r.body || "",
+      body: r.body || "",
     }),
   };
 
@@ -352,7 +352,7 @@
       return (o) => ({
         title: o.title || '',
         status: (o.status || 'draft').toLowerCase(),
-        excerpt: o.excerpt || '',
+        body: o.body || '',
         id: o.id || undefined
       });
     }

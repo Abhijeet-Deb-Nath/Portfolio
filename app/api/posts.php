@@ -16,7 +16,7 @@ try {
       $row = $st->fetch();
       json_out(['ok' => (bool)$row, 'data' => $row]);
     } else {
-      $st = $pdo->query("SELECT id, title, slug, cover_image, is_published, created_at, updated_at FROM posts ORDER BY created_at DESC");
+      $st = $pdo->query("SELECT id, title, slug, body, cover_image, is_published, created_at, updated_at FROM posts ORDER BY created_at DESC");
       json_out(['ok' => true, 'data' => $st->fetchAll()]);
     }
   }
