@@ -219,6 +219,19 @@ p{ margin:0 0 var(--space-4); color:var(--muted); }
   box-shadow: 0 12px 26px rgba(108,99,255,.18);
 }
 
+.admin-logout{
+  display:inline-flex; align-items:center; justify-content:center;
+  height:40px; padding:0 12px; border-radius:12px;
+  border:1px solid var(--border); color:#e6e8ff; text-decoration:none;
+}
+.admin-logout:hover{
+  border-color: rgba(108,99,255,.45);
+  box-shadow: 0 8px 18px rgba(108,99,255,.18);
+}
+
+[hidden] { display: none !important; }
+
+
 /* ------------------------------
    Hero
 ---------------------------------*/

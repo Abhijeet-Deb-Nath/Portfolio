@@ -184,3 +184,35 @@
     setInterval(render, dwell);
   }
 })();
+
+
+document.addEventListener('DOMContentLoaded', async () => {
+  const adminIcon  = document.querySelector('.admin-icon');  // shield link
+  const frontLogout = document.getElementById('frontLogout');
+
+  try {
+    const res = await fetch('/portfolio/app/auth/me.php', { credentials: 'same-origin' });
+    const me  = await res.json();
+
+    if (me && me.is_admin) {
+      if (adminIcon) adminIcon.setAttribute('href', '/portfolio/public/manhattan.html');
+      if (frontLogout) {
+        frontLogout.hidden = false;  // show only for admin
+        frontLogout.addEventListener('click', async (e) => {
+          e.preventDefault();
+          try { await fetch('/portfolio/app/auth/logout.php', { credentials: 'same-origin' }); }
+          finally {
+            sessionStorage.removeItem('csrf');
+            location.reload();
+          }
+        });
+      }
+    } else {
+      // viewer: keep logout hidden
+      if (frontLogout) frontLogout.hidden = true;
+    }
+  } catch {
+    // on any failure, hide for safety
+    if (frontLogout) frontLogout.hidden = true;
+  }
+});

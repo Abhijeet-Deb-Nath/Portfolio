@@ -76,7 +76,7 @@
       .replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
   const fetchJSON = async (url, opt = {}) => {
-    const o = { ...opt, headers: { ...(opt.headers || {}) } };
+    const o = { credentials: "same-origin", ...opt, headers: { ...(opt.headers || {}) } };
     // Add CSRF to non-GET requests
     if (o.method && o.method !== "GET") o.headers["X-CSRF-Token"] = CSRF;
     const res = await fetch(url, o);
