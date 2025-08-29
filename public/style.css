@@ -526,6 +526,173 @@ input:focus, textarea:focus{
    - 576px (sm)
 ---------------------------------*/
 
+/* ---------- Modal (public viewer) — base styles ---------- */
+.modal[hidden]{ display:none !important; }
+
+.modal{
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  z-index: 2000; /* above header/back-to-top */
+  background: color-mix(in oklab, #000 55%, transparent);
+  backdrop-filter: blur(2px);
+}
+
+.modal__dialog{
+  width: min(760px, 100%);
+  background: var(--card);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.modal__header{
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+}
+.modal__body{
+  padding: 16px;
+  display: grid; gap: 12px;
+}
+.modal__footer{
+  padding: 14px 16px;
+  border-top: 1px solid var(--border);
+  display: flex; gap: 10px; justify-content: flex-end;
+}
+
+.modal__close{
+  background: transparent;
+  border: 1px solid var(--border);
+  width: 38px; height: 38px;
+  border-radius: 12px;
+  color: var(--text);
+  cursor: pointer;
+}
+.modal__close:hover{
+  border-color: rgba(108,99,255,.45);
+  box-shadow: 0 6px 18px rgba(108,99,255,.18);
+}
+
+/* small helper for tags inside modal text */
+.modal .tag{
+  display:inline-block;
+  margin-right:8px; margin-bottom:8px;
+}
+
+
+/* =========================================
+   RESPONSIVE ENHANCEMENTS (append at end)
+   Breakpoints: 992px, 768px, 576px
+   ========================================= */
+
+/* Make modal content scroll if long */
+.modal__body{
+  max-height: 72vh; /* readable on laptops/phones */
+  overflow: auto;
+}
+
+/* ---------- <= 992px ---------- */
+@media (max-width: 992px){
+  /* 2-column layout for grids on tablets/smaller laptops */
+  .projects-grid,
+  .achievements-grid,
+  .blog-cards{
+    display: grid;                 /* safe even if already grid */
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+  }
+
+  /* Modal narrows slightly */
+  .modal__dialog{
+    width: min(640px, 100%);
+  }
+}
+
+/* ---------- <= 768px ---------- */
+@media (max-width: 768px){
+  /* Single-column stacks on portrait tablets / big phones */
+  .projects-grid,
+  .achievements-grid,
+  .blog-cards{
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  /* Card padding tightened for small screens */
+  .project-card,
+  .achievements-card,
+  .card{
+    padding: 14px;
+  }
+
+  /* Modal spacing & sizing tuned */
+  .modal{ padding: 12px; }
+  .modal__dialog{
+    width: min(560px, 100%);
+    border-radius: 14px;
+  }
+  .modal__header{ padding: 12px; }
+  .modal__body{ padding: 12px; }
+  .modal__footer{ padding: 12px; }
+  .modal__close{
+    width: 34px; height: 34px; border-radius: 10px;
+  }
+
+  /* Tighter heading scales (optional; applies only if these exist) */
+  h1{ font-size: clamp(1.6rem, 4vw, 2rem); }
+  h2{ font-size: clamp(1.35rem, 3.5vw, 1.6rem); }
+  h3{ font-size: clamp(1.1rem, 3vw, 1.3rem); }
+}
+
+/* ---------- <= 576px ---------- */
+@media (max-width: 576px){
+  /* Edge-to-edge feel on phones */
+  .modal{ padding: 0; }
+  .modal__dialog{
+    width: 100%;
+    border-radius: 0;              /* full-bleed modal */
+  }
+  .modal__header,
+  .modal__body,
+  .modal__footer{
+    padding: 12px 14px;
+  }
+
+  /* Comfortable taps */
+  .project-link,
+  .modal__close{
+    min-height: 44px;
+  }
+
+  /* Compact typography & tags */
+  .project-tags .tag{ font-size: 0.85rem; }
+  .project-links{ gap: 10px; flex-wrap: wrap; }
+
+  /* If you have generic wrappers, this gently reduces side padding */
+  .container, .section, main{
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+}
+
+/* ---------- Touch-only niceties ---------- */
+@media (hover: none){
+  .project-link,
+  .modal__close{
+    min-height: 44px; /* larger touch targets */
+  }
+}
+
+
+
+
+
+
 /* <= 992px */
 @media (max-width: 992px){
   .hero-content{ grid-template-columns: 1fr; text-align:center; }

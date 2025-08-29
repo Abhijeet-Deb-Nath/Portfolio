@@ -272,7 +272,10 @@
             <div class="project-tags"><span class="tag">C++</span><span class="tag">Algorithms</span></div>
             <div class="project-links">
               <a class="project-link" href="#" target="_blank" rel="noopener"><i class="fab fa-github"></i> GitHub</a>
-              <a class="project-link" href="#" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i> Live</a>
+              <a class="project-link open-detail" href="#" data-entity="projects" data-id="REPLACE_WITH_PROJECT_ID" role="button">
+                <i class="fas fa-eye"></i> View
+              </a>
+
             </div>
           </div>
         </article>
@@ -299,7 +302,10 @@
           <div class="achievements-content">
             <h3>Math Olympiad Medal</h3>
             <p>Issuing Organization</p>
-            <p class="issue-date">Issued: Jun 2020</p>
+            <a class="project-link open-detail" href="#" data-entity="achievements" data-id="REPLACE_WITH_ACHIEVEMENT_ID" role="button">
+              <i class="fas fa-eye"></i> View
+            </a>
+
           </div>
         </div>
 
@@ -313,7 +319,10 @@
           <div class="achievements-content">
             <h3>Dean’s List</h3>
             <p>KUET</p>
-            <p class="issue-date">Issued: Dec 2023</p>
+            <a class="project-link open-detail" href="#" data-entity="achievements" data-id="REPLACE_WITH_ACHIEVEMENT_ID" role="button">
+              <i class="fas fa-eye"></i> View
+            </a>
+
           </div>
         </div>
 
@@ -327,7 +336,10 @@
           <div class="achievements-content">
             <h3>Hackathon Finalist</h3>
             <p>Event Name</p>
-            <p class="issue-date">Issued: Aug 2024</p>
+            <a class="project-link open-detail" href="#" data-entity="achievements" data-id="REPLACE_WITH_ACHIEVEMENT_ID" role="button">
+              <i class="fas fa-eye"></i> View
+            </a>
+
           </div>
         </div>
       </div>
@@ -344,7 +356,9 @@
 
       <div class="blog-cards">
         <article class="card fade-in">
-          <a href="#" class="card-link" aria-label="Read blog post: Getting started with Laravel">
+          <a href="#" class="card-link open-detail" data-entity="blogs" data-id="REPLACE_WITH_BLOG_ID"
+            aria-label="Read blog post: Getting started with Laravel">
+
             <div class="card-content">
               <h3>Getting Started with Laravel</h3>
               <p>My go-to project setup, folder structure tips, and learning roadmap.</p>
@@ -353,7 +367,9 @@
         </article>
 
         <article class="card fade-in">
-          <a href="#" class="card-link" aria-label="Read blog post: Competitive programming notes">
+          <a href="#" class="card-link open-detail" data-entity="blogs" data-id="REPLACE_WITH_BLOG_ID"
+             aria-label="Read blog post: Getting started with Laravel">
+
             <div class="card-content">
               <h3>Competitive Programming Notes</h3>
               <p>Templates, patterns, and pitfalls I keep hitting.</p>
@@ -362,7 +378,9 @@
         </article>
 
         <article class="card fade-in">
-          <a href="#" class="card-link" aria-label="Read blog post: SQL for developers">
+          <a href="#" class="card-link open-detail" data-entity="blogs" data-id="REPLACE_WITH_BLOG_ID"
+             aria-label="Read blog post: Getting started with Laravel">
+
             <div class="card-content">
               <h3>SQL for Developers</h3>
               <p>Practical queries, joins, and schema tips for small projects.</p>
@@ -430,6 +448,26 @@
       </div>
     </div>
   </section>
+
+
+  <!-- Detail Modal (public viewer) -->
+<div class="modal" id="detailModal" hidden aria-modal="true" role="dialog" aria-labelledby="detailTitle">
+  <div class="modal__dialog">
+    <div class="modal__header">
+      <h3 id="detailTitle">Details</h3>
+      <button class="modal__close" data-close-modal aria-label="Close">✕</button>
+    </div>
+    <div class="modal__body" id="detailBody"></div>
+    <div class="modal__footer">
+      <button class="btn secondary-btn" data-close-modal>Close</button>
+    </div>
+  </div>
+</div>
+
+
+
+
+
 
   <!-- Footer -->
   <footer class="footer" role="contentinfo">

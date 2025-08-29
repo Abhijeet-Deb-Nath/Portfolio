@@ -43,11 +43,17 @@
     window.scrollTo({ top: y - headerH - 12, behavior: 'smooth' });
   };
 
+  // IMPORTANT: ignore .open-detail links here so we don't fight the modal handler
   document.addEventListener('click', (e) => {
+    // If this click is on a `.open-detail`, let the detail handler take over
+    if (e.target.closest('.open-detail')) return;
+
     const link = e.target.closest('a[href^="#"]');
     if (!link) return;
+
     const id = link.getAttribute('href');
     if (id === '#') return; // ignore dummy anchors
+
     const target = document.querySelector(id);
     if (target) {
       e.preventDefault();
@@ -112,7 +118,6 @@
     // --- Skill bars animation
     $$('.skill-progress').forEach(bar => {
       const pct = parseInt(bar.dataset.progress || '0', 10);
-      // start at 0, then animate to data-progress
       bar.style.width = '0%';
       setTimeout(() => { bar.style.width = `${pct}%`; }, 200);
     });
@@ -185,7 +190,7 @@
   }
 })();
 
-
+/* ---------------- Admin icon + logout visibility ---------------- */
 document.addEventListener('DOMContentLoaded', async () => {
   const adminIcon  = document.querySelector('.admin-icon');  // shield link
   const frontLogout = document.getElementById('frontLogout');
@@ -208,20 +213,18 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
       }
     } else {
-      // viewer: keep logout hidden
       if (frontLogout) frontLogout.hidden = true;
     }
   } catch {
-    // on any failure, hide for safety
     if (frontLogout) frontLogout.hidden = true;
   }
 });
 
-
-// ---------- Public site: render DB content (read-only) ----------
+/* ---------------- Public site: DB content + detail modal ---------------- */
 (function () {
   const API_BASE = "/portfolio/app/api";
-  const $ = (sel, ctx = document) => ctx.querySelector(sel);
+  const $  = (sel, ctx = document) => ctx.querySelector(sel);
+  const $$ = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
 
   const fetchJSON = async (url) => {
     const res = await fetch(url, { credentials: "same-origin" });
@@ -230,17 +233,50 @@ document.addEventListener('DOMContentLoaded', async () => {
     return data;
   };
   const esc = (s) => (s || "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const nl2brEsc = (s) => esc(s).replace(/\n/g, "<br>");
 
+  // ---------- Modal helpers ----------
+  const modal = $('#detailModal');
+  const detailTitle = $('#detailTitle');
+  const detailBody  = $('#detailBody');
+
+  function openModal() {
+    if (!modal) return;
+    modal.hidden = false;
+    modal.setAttribute('data-open', 'true');
+    modal.addEventListener('click', overlayClose);
+    document.addEventListener('keydown', escClose);
+    $$('[data-close-modal]', modal).forEach(btn =>
+      btn.addEventListener('click', () => closeModal(), { once: true })
+    );
+  }
+  function closeModal() {
+    if (!modal) return;
+    modal.hidden = true;
+    modal.removeAttribute('data-open');
+    modal.removeEventListener('click', overlayClose);
+    document.removeEventListener('keydown', escClose);
+    detailTitle.textContent = 'Details';
+    detailBody.innerHTML = '';
+  }
+  function overlayClose(e) { if (e.target.classList.contains('modal')) closeModal(); }
+  function escClose(e) { if (e.key === 'Escape') closeModal(); }
+
+  // map UI entity -> API file name
+  const endpoint = (entity) => (entity === 'blogs' ? 'posts' : entity);
+
+  // ---------- Loaders (list) ----------
   async function loadProjects() {
     const wrap = $(".projects-grid");
     if (!wrap) return;
-    /*try {
+    try {
       const { data } = await fetchJSON(`${API_BASE}/projects.php`);
+      const rows = (Array.isArray(data) ? data : []).filter(r => (r.is_published ?? 1) == 1);
       wrap.innerHTML = "";
-      (data || []).forEach(p => {
+      rows.forEach(p => {
         const tags = (p.tags || "").split(",").map(s => s.trim()).filter(Boolean);
         const el = document.createElement("article");
-        el.className = "project-card fade-in";
+        el.className = "project-card fade-in appear";
         el.innerHTML = `
           <div class="project-image">
             <div class="project-placeholder"><i class="fas fa-code"></i></div>
@@ -250,49 +286,27 @@ document.addEventListener('DOMContentLoaded', async () => {
             <p>${esc((p.description || "").slice(0, 160))}${(p.description || "").length > 160 ? "…" : ""}</p>
             <div class="project-tags">${tags.map(t => `<span class="tag">${esc(t)}</span>`).join("")}</div>
             <div class="project-links">
-              ${p.github_url ? `<a class="project-link" href="${p.github_url}" target="_blank" rel="noopener"><i class="fab fa-github"></i> GitHub</a>` : ""}
+              ${p.github_url ? `<a class="project-link" href="${esc(p.github_url)}" target="_blank" rel="noopener"><i class="fab fa-github"></i> GitHub</a>` : ""}
+              <a class="project-link open-detail" href="#" data-entity="projects" data-id="${p.id}">
+                <i class="fas fa-eye"></i> View
+              </a>
             </div>
           </div>`;
         wrap.appendChild(el);
       });
     } catch (e) { console.warn("Projects load failed:", e); }
-    */
-    try {
-  const { data } = await fetchJSON(`${API_BASE}/projects.php`);
-  const rows = (Array.isArray(data) ? data : []).filter(r => (r.is_published ?? 1) == 1);
-  wrap.innerHTML = "";
-  rows.forEach(p => {
-    const tags = (p.tags || "").split(",").map(s => s.trim()).filter(Boolean);
-    const el = document.createElement("article");
-    el.className = "project-card fade-in appear";
-    el.innerHTML = `
-      <div class="project-image">
-        <div class="project-placeholder"><i class="fas fa-code"></i></div>
-      </div>
-      <div class="project-content">
-        <h3>${esc(p.title)}</h3>
-        <p>${esc((p.description || "").slice(0, 160))}${(p.description || "").length > 160 ? "…" : ""}</p>
-        <div class="project-tags">${tags.map(t => `<span class="tag">${esc(t)}</span>`).join("")}</div>
-        <div class="project-links">
-          ${p.github_url ? `<a class="project-link" href="${esc(p.github_url)}" target="_blank" rel="noopener"><i class="fab fa-github"></i> GitHub</a>` : ""}
-        </div>
-      </div>`;
-    wrap.appendChild(el);
-  });
-} catch (e) { console.warn("Projects load failed:", e); }
-
-    }
+  }
 
   async function loadAchievements() {
     const wrap = $(".achievements-grid");
     if (!wrap) return;
-    /*
     try {
       const { data } = await fetchJSON(`${API_BASE}/achievements.php`);
+      const rows = (Array.isArray(data) ? data : []).filter(r => (r.is_published ?? 1) == 1);
       wrap.innerHTML = "";
-      (data || []).forEach(a => {
+      rows.forEach(a => {
         const el = document.createElement("div");
-        el.className = "achievements-card fade-in";
+        el.className = "achievements-card fade-in appear";
         el.innerHTML = `
           <div class="achievements-image">
             <div class="achievements-placeholder">
@@ -303,48 +317,32 @@ document.addEventListener('DOMContentLoaded', async () => {
           <div class="achievements-content">
             <h3>${esc(a.title)}</h3>
             <p class="issue-date">Issued: ${esc(a.issued_at || "")}</p>
+            <div style="margin-top:8px">
+              <a class="project-link open-detail" href="#" data-entity="achievements" data-id="${a.id}">
+                <i class="fas fa-eye"></i> View
+              </a>
+            </div>
           </div>`;
         wrap.appendChild(el);
       });
     } catch (e) { console.warn("Achievements load failed:", e); }
-     */
-    try {
-  const { data } = await fetchJSON(`${API_BASE}/achievements.php`);
-  const rows = (Array.isArray(data) ? data : []).filter(r => (r.is_published ?? 1) == 1);
-  wrap.innerHTML = "";
-  rows.forEach(a => {
-    const el = document.createElement("div");
-    el.className = "achievements-card fade-in appear";
-    el.innerHTML = `
-      <div class="achievements-image">
-        <div class="achievements-placeholder">
-          <i class="fas fa-trophy"></i>
-          <p>Achievement</p>
-        </div>
-      </div>
-      <div class="achievements-content">
-        <h3>${esc(a.title)}</h3>
-        <p class="issue-date">Issued: ${esc(a.issued_at || "")}</p>
-      </div>`;
-    wrap.appendChild(el);
-  });
-} catch (e) { console.warn("Achievements load failed:", e); }
-
   }
 
   async function loadBlogs() {
     const wrap = $(".blog-cards");
     if (!wrap) return;
-    /*
     try {
       const { data } = await fetchJSON(`${API_BASE}/posts.php`);
+      const rows = (Array.isArray(data) ? data : []).filter(r => (r.is_published ?? 1) == 1);
       wrap.innerHTML = "";
-      (data || []).forEach(b => {
+      rows.forEach(b => {
         const excerpt = (b.body || "").replace(/\s+/g, " ").trim().slice(0, 160) + ((b.body || "").length > 160 ? "…" : "");
         const el = document.createElement("article");
-        el.className = "card fade-in";
+        el.className = "card fade-in appear";
         el.innerHTML = `
-          <a href="#" class="card-link" aria-label="Read blog post: ${esc(b.title || "")}">
+          <a href="#" class="card-link open-detail"
+             data-entity="blogs" data-id="${b.id}"
+             aria-label="Read blog post: ${esc(b.title || "")}">
             <div class="card-content">
               <h3>${esc(b.title || "")}</h3>
               <p>${esc(excerpt)}</p>
@@ -353,26 +351,73 @@ document.addEventListener('DOMContentLoaded', async () => {
         wrap.appendChild(el);
       });
     } catch (e) { console.warn("Blogs load failed:", e); }
-     */
-    try {
-  const { data } = await fetchJSON(`${API_BASE}/posts.php`);
-  const rows = (Array.isArray(data) ? data : []).filter(r => (r.is_published ?? 1) == 1);
-  wrap.innerHTML = "";
-  rows.forEach(b => {
-    const excerpt = (b.body || "").replace(/\s+/g, " ").trim().slice(0, 160) + ((b.body || "").length > 160 ? "…" : "");
-    const el = document.createElement("article");
-    el.className = "card fade-in appear";
-    el.innerHTML = `
-      <a href="#" class="card-link" aria-label="Read blog post: ${esc(b.title || "")}">
-        <div class="card-content">
-          <h3>${esc(b.title || "")}</h3>
-          <p>${esc(excerpt)}</p>
-        </div>
-      </a>`;
-    wrap.appendChild(el);
-  });
-} catch (e) { console.warn("Blogs load failed:", e); }
+  }
 
+  // ---------- Detail fetchers ----------
+  async function openDetail(entity, id) {
+    try {
+      const ep = endpoint(entity);
+      const { data } = await fetchJSON(`${API_BASE}/${ep}.php?id=${encodeURIComponent(id)}`);
+      const row = data || {};
+      renderDetail(entity, row);
+      openModal();
+    } catch (e) {
+      try {
+        const ep = endpoint(entity);
+        const { data } = await fetchJSON(`${API_BASE}/${ep}.php`);
+        const row = (Array.isArray(data) ? data : []).find(r => String(r.id) === String(id));
+        if (!row) throw new Error('Not found');
+        renderDetail(entity, row);
+        openModal();
+      } catch (err) {
+        detailTitle.textContent = 'Error';
+        detailBody.innerHTML = `<p>Could not load this item. Please try again later.</p>`;
+        openModal();
+      }
+    }
+  }
+
+  // expose for the global click handler
+  window.openDetail = openDetail;
+
+  function renderDetail(entity, r) {
+    if (!detailTitle || !detailBody) return;
+    if (entity === 'projects') {
+      const tags = (r.tags || "").split(",").map(s => s.trim()).filter(Boolean);
+      detailTitle.textContent = r.title || 'Project';
+      detailBody.innerHTML = `
+        <div>
+          <p>${nl2brEsc(r.description || "No description provided.")}</p>
+          ${tags.length ? `<div style="margin-top:8px">${tags.map(t => `<span class="tag">${esc(t)}</span>`).join("")}</div>` : ""}
+          <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
+            ${r.github_url ? `<a class="project-link" href="${esc(r.github_url)}" target="_blank" rel="noopener"><i class="fab fa-github"></i> GitHub</a>` : ""}
+          </div>
+        </div>
+      `;
+      return;
+    }
+    if (entity === 'achievements') {
+      detailTitle.textContent = r.title || 'Achievement';
+      detailBody.innerHTML = `
+        <div>
+          <p><strong>Issued:</strong> ${esc(r.issued_at || "—")}</p>
+          <p>${nl2brEsc(r.description || "No description provided.")}</p>
+          ${r.image_path ? `<p><a class="project-link" href="${esc(r.image_path)}" target="_blank" rel="noopener"><i class="fas fa-link"></i> Open Link</a></p>` : ""}
+        </div>
+      `;
+      return;
+    }
+    if (entity === 'blogs') {
+      detailTitle.textContent = r.title || 'Blog';
+      detailBody.innerHTML = `
+        <article>
+          <p style="white-space:pre-wrap; margin:0">${nl2brEsc(r.body || "No content.")}</p>
+        </article>
+      `;
+      return;
+    }
+    detailTitle.textContent = 'Details';
+    detailBody.textContent = 'No data.';
   }
 
   document.addEventListener("DOMContentLoaded", () => {
@@ -381,3 +426,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     loadBlogs();
   });
 })();
+
+/* ---------------- Single global handler for all .open-detail clicks ---------------- */
+document.addEventListener('click', function (e) {
+  const t = e.target.closest('.open-detail');
+  if (!t) return;
+
+  e.preventDefault(); // stops scroll-to-top from href="#"
+  const entity = t.dataset.entity; // "projects" | "achievements" | "blogs"
+  const id     = t.dataset.id;     // numeric DB id
+
+  if (entity && id) window.openDetail?.(entity, id);
+});
